@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownPeak-3", "CrownPeak-3\CrownPeak-3.csproj", "{3928D5A3-ED66-4646-B704-883F018267A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrownPeak-3-Test", "CrownPeak-3-Test\CrownPeak-3-Test.csproj", "{E6D2C260-47C2-478C-B29B-ADB82FC0EF0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3928D5A3-ED66-4646-B704-883F018267A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3928D5A3-ED66-4646-B704-883F018267A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3928D5A3-ED66-4646-B704-883F018267A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3928D5A3-ED66-4646-B704-883F018267A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D2C260-47C2-478C-B29B-ADB82FC0EF0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D2C260-47C2-478C-B29B-ADB82FC0EF0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D2C260-47C2-478C-B29B-ADB82FC0EF0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D2C260-47C2-478C-B29B-ADB82FC0EF0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0430E88C-F673-4114-85B4-4D01328055F0}
+	EndGlobalSection
+EndGlobal
