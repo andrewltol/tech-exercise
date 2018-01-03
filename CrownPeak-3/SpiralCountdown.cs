@@ -35,15 +35,20 @@ namespace CrownPeak_3
                 return _columns;
             }
         }
+        private int _spiralNumber;
+        private string[,] _spiralText;
 
-        public SpiralCountdown(int startNumber)
+        public SpiralCountdown(int number)
         {
-            CalculateSpiralDimensions(startNumber);
+            _spiralNumber = number;
+            CalculateSpiralDimensions(number);
         }
 
         public void PrintSpiral()
         {
+            CreateSpiralText();
 
+            
         }
 
         private void CalculateSpiralDimensions(int number)
@@ -90,15 +95,87 @@ namespace CrownPeak_3
                 }
 
                 // Lock enumeration to valid values.
-                if (++currentDirection > Direction.Left)
-                {
-                    currentDirection = 0;
-                }
+                currentDirection = ChangeSpiralDirection(currentDirection);
             }
 
             // Set member variables for setup.
             _rows = rows;
             _columns = columns;
+        }
+
+        private void CreateSpiralText()
+        {
+            _spiralText = new string[Rows, Columns];
+
+            // Determine starting point.  Note: More code would be needed if FIRST_DIRECTION was variable.
+            int cursorX = Columns / 2;
+            int cursorY = Rows / 2;
+
+            Direction currentDirection = FIRST_DIRECTION;
+            int columnLength = 1, rowLength = 1;
+            int i = 0;
+            while (i < _spiralNumber)
+            {
+                // Basic setup for writing in direction.
+                int startIndex = 0;
+                switch (currentDirection)
+                {
+                    case Direction.Left:
+                        {
+                            for (startIndex = cursorX; cursorX >= startIndex - rowLength; --cursorX)
+                            {
+                                _spiralText[cursorX, cursorY] = i++.ToString();
+                            }
+                            break;
+                        }
+                    case Direction.Right:
+                        {
+                            
+                            for (startIndex = cursorX; cursorX <= startIndex + rowLength; ++cursorX)
+                            {
+                                _spiralText[cursorX, cursorY] = i++.ToString();
+                            }
+                            break;
+                        }
+                    case Direction.Up:
+                        {
+                            
+                            for (startIndex = cursorY; cursorY >= startIndex - rowLength; --cursorY)
+                            {
+                                _spiralText[cursorX, cursorY] = i++.ToString();
+                            }
+                            break;
+                        }
+                    case Direction.Down:
+                        {
+                            for (startIndex = cursorY; cursorY <= startIndex + columnLength; ++cursorY)
+                            {
+                                _spiralText[cursorX, cursorY] = i++.ToString();
+                            }
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                currentDirection = ChangeSpiralDirection(currentDirection);
+            }
+        }
+
+        /// <summary>
+        /// Updates the direction of the spiral to conform to enum.
+        /// </summary>
+        /// <param name="currentDirection">Direction before update.</param>
+        /// <returns>Direction after update.</returns>
+        private Direction ChangeSpiralDirection(Direction direction)
+        {
+            // Lock enumeration to valid values.
+            if (++direction > Direction.Left)
+            {
+                direction = 0;
+            }
+
+            return direction;
         }
     }
 }
