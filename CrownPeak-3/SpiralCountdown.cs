@@ -18,6 +18,7 @@ namespace CrownPeak_3
         }
 
         const Direction FIRST_DIRECTION = Direction.Right;
+        const int NO_PRINT_INT = -1;
 
         private int _rows = 0;
         public int Rows
@@ -27,6 +28,7 @@ namespace CrownPeak_3
                 return _rows;
             }
         }
+
         private int _columns = 0;
         public int Columns
         {
@@ -35,25 +37,32 @@ namespace CrownPeak_3
                 return _columns;
             }
         }
-        private int _spiralNumber;
-        private string[,] _spiralText;
+
+        protected int _spiralNumber;
+        protected int[,] _spiralValue;
 
         public SpiralCountdown(int number)
         {
             _spiralNumber = number;
-            CalculateSpiralDimensions(number);
         }
 
-        public void PrintSpiral()
+        /// <summary>
+        /// Configures and prints the spiral to console.
+        /// </summary>
+        public void CalculateAndPrintSpiral()
         {
-            CreateSpiralText();
-
-            
+            CalculateSpiralDimensions();
+            DetermineNumberLocations();
+            PrintSpiral();
         }
 
-        private void CalculateSpiralDimensions(int number)
+        /// <summary>
+        /// Determines the dimensions of the spiral array.
+        /// </summary>
+        /// <param name="number">Number to spiral to.</param>
+        protected void CalculateSpiralDimensions()
         {
-            if (number < 0)
+            if (_spiralNumber < 0)
             {
                 Console.WriteLine("Cannot spiral a negative number");
                 throw new InvalidOperationException();
@@ -64,7 +73,7 @@ namespace CrownPeak_3
 
             // Calculate the width and height of spiral
             int i = 0;
-            while (i < number)
+            while (i < _spiralNumber)
             {
                 switch (currentDirection)
                 {
@@ -72,7 +81,7 @@ namespace CrownPeak_3
                     case Direction.Down:
                         {
                             i += rows;
-                            if (i <= number)
+                            if (i <= _spiralNumber)
                             {
                                 rows++;
                             }
@@ -82,7 +91,7 @@ namespace CrownPeak_3
                     case Direction.Right:
                         {
                             i += columns;
-                            if (i <= number)
+                            if (i <= _spiralNumber)
                             {
                                 columns++;
                             }
@@ -103,55 +112,80 @@ namespace CrownPeak_3
             _columns = columns;
         }
 
-        private void CreateSpiralText()
+        /// <summary>
+        /// Populates an array to know location of each number in spiral.
+        /// </summary>
+        protected void DetermineNumberLocations()
         {
-            _spiralText = new string[Rows, Columns];
+            _spiralValue = new int[_columns, _rows];
+
+            // Set 'no print' value for all elements of array.
+            for (int j = 0; j < _rows; ++j)
+            {
+                for (int k = 0; k < _columns; ++k)
+                {
+                    _spiralValue[k, j] = NO_PRINT_INT;
+                }
+            }
 
             // Determine starting point.  Note: More code would be needed if FIRST_DIRECTION was variable.
-            int cursorX = Columns / 2;
-            int cursorY = Rows / 2;
+            int cursorX = (Columns - 1) / 2;
+            int cursorY = (Rows - 1) / 2;
+
+            // Init first value.
+            _spiralValue[cursorX, cursorY] = 0;
 
             Direction currentDirection = FIRST_DIRECTION;
-            int columnLength = 1, rowLength = 1;
-            int i = 0;
+            int columns = 1, rows = 1;
+            int i = 1;      // Start at 1, 0 done in initialization.
             while (i < _spiralNumber)
             {
                 // Basic setup for writing in direction.
-                int startIndex = 0;
+                int startIndex;
                 switch (currentDirection)
                 {
                     case Direction.Left:
                         {
-                            for (startIndex = cursorX; cursorX >= startIndex - rowLength; --cursorX)
+                            startIndex = cursorX;
+                            while (cursorX > startIndex - columns && i <= _spiralNumber)
                             {
-                                _spiralText[cursorX, cursorY] = i++.ToString();
+                                --cursorX;
+                                _spiralValue[cursorX, cursorY] = i++;
                             }
+                            ++columns;
                             break;
                         }
                     case Direction.Right:
                         {
-                            
-                            for (startIndex = cursorX; cursorX <= startIndex + rowLength; ++cursorX)
+                            startIndex = cursorX;
+                            while (cursorX < startIndex + columns && i <= _spiralNumber)
                             {
-                                _spiralText[cursorX, cursorY] = i++.ToString();
+                                ++cursorX;
+                                _spiralValue[cursorX, cursorY] = i++;
                             }
+                            ++columns;
                             break;
                         }
                     case Direction.Up:
                         {
-                            
-                            for (startIndex = cursorY; cursorY >= startIndex - rowLength; --cursorY)
+                            startIndex = cursorY;
+                            while(cursorY > startIndex - rows && i <= _spiralNumber)
                             {
-                                _spiralText[cursorX, cursorY] = i++.ToString();
+                                --cursorY;
+                                _spiralValue[cursorX, cursorY] = i++;
                             }
+                            ++rows;
                             break;
                         }
                     case Direction.Down:
                         {
-                            for (startIndex = cursorY; cursorY <= startIndex + columnLength; ++cursorY)
+                            startIndex = cursorY;
+                            while (cursorY < startIndex + rows && i <= _spiralNumber)
                             {
-                                _spiralText[cursorX, cursorY] = i++.ToString();
+                                ++cursorY;
+                                _spiralValue[cursorX, cursorY] = i++;
                             }
+                            ++rows;
                             break;
                         }
                     default:
@@ -160,6 +194,37 @@ namespace CrownPeak_3
 
                 currentDirection = ChangeSpiralDirection(currentDirection);
             }
+        }
+
+        /// <summary>
+        /// Prints spiral to console output.
+        /// </summary>
+        protected void PrintSpiral()
+        {
+            for (int i = 0; i < _rows; ++i)
+            {
+                for (int j = 0; j < _columns; ++j)
+                {
+                    if (_spiralValue[j, i] != NO_PRINT_INT)
+                    {
+                        OutputNumberAsString(_spiralValue[j, i]);
+                    }
+                    else
+                    {
+                        Console.Write("\t");
+                    }
+                }
+                Console.Write("\n");
+            }
+        }
+
+        /// <summary>
+        /// Writes number to the console.
+        /// </summary>
+        /// <param name="number">Number to write.</param>
+        virtual protected void OutputNumberAsString(int number)
+        {
+            Console.Write(number.ToString() + "\t");
         }
 
         /// <summary>

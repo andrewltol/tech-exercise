@@ -23,7 +23,7 @@ namespace CrownPeak_3
             else
             {
                 SpiralCountdown countdown = new SpiralCountdown(number);
-                countdown.PrintSpiral();
+                countdown.CalculateAndPrintSpiral();
             }
 
             WaitForClose();
